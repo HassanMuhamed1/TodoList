@@ -1,3 +1,6 @@
+
+import 'package:task_todo/db.dart';
+
 extension Validations on String {
   bool isValidEmail() {
     return(
@@ -13,4 +16,5 @@ extension Validations on String {
            && contains(RegExp(r'[A-Z]')
            ); 
   }
+
 }
