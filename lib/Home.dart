@@ -8,47 +8,84 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void showSubmittedDataInDialog(BuildContext context) {
-    final TextEditingController _titleController = TextEditingController();
-    final TextEditingController _noteController = TextEditingController();
+  // Declare the controllers at the class level
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
 
+  @override
+  void dispose() {
+    // Dispose controllers to prevent memory leaks
+    _titleController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  void showSubmittedDataInDialog(BuildContext context) {
     showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Add Note'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Center(child: const Text('New Task',style:TextStyle(fontWeight: FontWeight.w500 , color: Color.fromARGB(235, 47, 0, 255)),)),
           content: SizedBox(
-            height: 100,
+            height: 200,
+            width: 300,
             child: Column(
+              
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 30,),
                 TextField(
                   controller: _titleController,
                   decoration:
-                      InputDecoration(hintText: "Title", labelText: 'Title'),
+                      InputDecoration(
+                        labelText: 'Title',
+                        labelStyle: TextStyle(fontWeight: FontWeight.w400 , color: Colors.indigo),
+                      ),
                 ),
-                SizedBox(height: 10), // Space between the text fields
+                SizedBox(height: 30), // Space between the text fields
                 TextField(
                   controller: _noteController,
                   decoration:
-                      InputDecoration(hintText: "Note", labelText: 'Note'),
+                      InputDecoration( labelText: 'Note',labelStyle: TextStyle(fontWeight: FontWeight.w400 , color: Colors.indigo),),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                // Perform an action such as printing the values or handling submission
-                print('Title: ${_titleController.text}');
-                print('Note: ${_noteController.text}');
-                Navigator.of(dialogContext)
-                    .pop(); // Dismiss the dialog after the action
-                _titleController.dispose(); // Dispose controllers
-                _noteController.dispose();
-              },
-              child: const Text('Add Note'),
-            ),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 63, 55, 204), // Start color of the gradient
+                        Color.fromARGB(
+                            255, 36, 92, 170) // End color of the gradient
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              )            ),
           ],
         );
       },
@@ -91,14 +128,14 @@ class _HomePageState extends State<HomePage> {
           leading: IconButton(
               onPressed: () {},
               icon: Image.asset(
-                'icons/checkbox.png',
+                'assets/icons/checkbox.png',
                 width: 27,
                 height: 27,
               )),
           trailing: IconButton(
               onPressed: () {},
               icon: Image.asset(
-                'icons/pencil.png',
+                'assets/icons/pencil.png',
                 width: 17,
                 height: 17,
               )),
