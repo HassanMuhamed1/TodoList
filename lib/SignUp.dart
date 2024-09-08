@@ -288,7 +288,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.indigo),
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context, '/signup');
+                            Navigator.pushNamed(context, '/login');
                           },
                         )
                       ],
