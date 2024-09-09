@@ -175,6 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (isValidEmail && isValidPassword) {
                         if (users.containsKey(email)) {
                           if (users[email] == password) {
+
                             Navigator.pushReplacementNamed(context, '/home');
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
