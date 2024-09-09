@@ -14,7 +14,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    // Dispose controllers to prevent memory leaks
     _titleController.dispose();
     _noteController.dispose();
     super.dispose();
@@ -30,20 +29,18 @@ class _HomePageState extends State<HomePage> {
           ),
           title: Center(
               child: const Text(
-                'New Task',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(235, 47, 0, 255)),
-              )),
+            'New Task',
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(235, 47, 0, 255)),
+          )),
           content: SizedBox(
             height: 200,
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 30,
-                ),
+                SizedBox(height: 30),
                 TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
@@ -52,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w400, color: Colors.indigo),
                   ),
                 ),
-                SizedBox(height: 30), // Space between the text fields
+                SizedBox(height: 30),
                 TextField(
                   controller: _noteController,
                   decoration: InputDecoration(
@@ -67,36 +64,46 @@ class _HomePageState extends State<HomePage> {
           actions: <Widget>[
             Center(
                 child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 63, 55, 204),
-                          // Start color of the gradient
-                          Color.fromARGB(255, 36, 92, 170)
-                          // End color of the gradient
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Add',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+              onTap: () {
+                final String title = _titleController.text.trim();
+                final String note = _noteController.text.trim();
+
+                // Ensure the title is not empty
+                if (title.isNotEmpty) {
+                  setState(() {
+                    // Add the new note to the notes map
+                    notes[title] = false; // Default new notes as not completed
+                  });
+                }
+                _titleController.clear();
+                _noteController.clear();
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 63, 55, 204),
+                      Color.fromARGB(255, 36, 92, 170)
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    'Add',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                )),
+                ),
+              ),
+            )),
           ],
         );
       },
@@ -121,48 +128,53 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.only(top: 10, bottom: 10),
-        // color: Colors.grey.shade300,
-        decoration: BoxDecoration(
-            color: Color.fromARGB(198, 226, 231, 241),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 4, crossAxisCount: 0),
-          itemCount: notes.length,
-          itemBuilder:(context, index) {
-            return ListTile(
+      body: ListView.builder(
+        itemCount: notes.length,
+        itemBuilder: (context, index) {
+          String noteTitle = notes.keys.elementAt(index);
+          bool isCompleted = notes[noteTitle]!;
+          return Container(
+            padding: EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: isCompleted?Colors.indigo.shade50: Colors.white70,
+            ),
+            margin: EdgeInsets.symmetric(horizontal:  8, vertical: 4),
+            child: ListTile(
               title: Text(
-                '${notes[index]}',
+                noteTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 17,
+                  decoration: isCompleted?TextDecoration.lineThrough : null,
                 ),
               ),
               leading: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/icons/checkbox.png',
-                    width: 27,
-                    height: 27,
+                  onPressed: () {
+                    setState(() {
+                      notes[noteTitle] =!isCompleted;
+                    });
+                  },
+                  icon: Icon(
+                    isCompleted
+                        ? Icons.check_box
+                        : Icons.check_box_outline_blank,
+                    color: isCompleted ? Colors.indigoAccent : Colors.grey,
+                    size: 27,
                   )),
               trailing: IconButton(
                   onPressed: () {},
-                  icon: Image.asset(
-                    'assets/icons/pencil.png',
-                    width: 17,
-                    height: 17,
+                  icon: Icon(
+                    Icons.edit,
+                    size: 17,
                   )),
-            );
-          },
-        ),),
+            ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(
-                20)) // Adjust radius for more or less rounded corners
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         onPressed: () {
           showSubmittedDataInDialog(context);
         },
