@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(
                     labelText: 'Title',
                     labelStyle: TextStyle(
+
                         fontWeight: FontWeight.w400, color: Colors.indigo),
                   ),
                 ),
@@ -71,7 +72,6 @@ class _HomePageState extends State<HomePage> {
                 // Ensure the title is not empty
                 if (title.isNotEmpty) {
                   setState(() {
-                    // Add the new note to the notes map
                     notes[title] = false; // Default new notes as not completed
                   });
                 }
@@ -115,12 +115,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white,
-              ))
+          Container(
+            margin: EdgeInsets.only(right: 18),
+              child: ImageIcon(AssetImage('assets/icons/list.png'),color: Colors.white,size: 20,))
         ],
         backgroundColor: Colors.indigo,
         title: Text(
@@ -145,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 noteTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 17,
+                  fontSize: 14,
                   decoration: isCompleted?TextDecoration.lineThrough : null,
                 ),
               ),
@@ -155,19 +152,18 @@ class _HomePageState extends State<HomePage> {
                       notes[noteTitle] =!isCompleted;
                     });
                   },
-                  icon: Icon(
+                  icon: ImageIcon(
                     isCompleted
-                        ? Icons.check_box
-                        : Icons.check_box_outline_blank,
-                    color: isCompleted ? Colors.indigoAccent : Colors.grey,
-                    size: 27,
+                        ?AssetImage('assets/icons/check-box.png')
+                        : AssetImage('assets/icons/checkbox.png'),
+                    color: isCompleted ? Colors.indigoAccent.withOpacity(0.92) : Colors.black.withOpacity(0.3),
+                    size: 23,
                   )),
               trailing: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.edit,
-                    size: 17,
-                  )),
+                  onPressed: () {
+
+                  },
+                  icon: ImageIcon(AssetImage('assets/icons/edit.png'),size: 22,)),
             ),
           );
         },
