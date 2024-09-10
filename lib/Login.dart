@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'Home.dart';
 import 'db.dart';
 import 'Extension.dart';
 
@@ -12,18 +13,18 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isValidEmail = true, isValidPassword = true,isObsecure = true  ;
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   void validateEmail() {
     setState(() {
-      isValidEmail = _emailController.text.isValidEmail();
+      isValidEmail = emailController.text.isValidEmail();
     });
   }
 
   void validatePassword() {
     setState(() {
-      isValidPassword = _passwordController.text.isValidPassword();
+      isValidPassword = passwordController.text.isValidPassword();
     });
   }
 
@@ -96,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (newText) {
                       validateEmail();
                     },
-                    controller: _emailController,
+                    controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email',
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     obscuringCharacter: '·',
                     obscureText: isObsecure,
-                    controller: _passwordController,
+                    controller: passwordController,
                     decoration: InputDecoration(
                         labelText: 'Password',
                         errorText: isValidPassword
@@ -170,13 +171,21 @@ class _LoginPageState extends State<LoginPage> {
                   right: 20,
                   child: InkWell(
                     onTap: () {
-                      String email = _emailController.text;
-                      String password = _passwordController.text;
+                      String email = emailController.text;
+                      String password = passwordController.text;
                       if (isValidEmail && isValidPassword) {
                         if (users.containsKey(email)) {
                           if (users[email] == password) {
 
-                            Navigator.pushReplacementNamed(context, '/home');
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                  email: email,
+                                  password: password,
+                                ),
+                              ),
+                            );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Incorrect Password!')));
