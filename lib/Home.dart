@@ -155,7 +155,8 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     notes.remove(noteTitle);
-                    notesComp.remove(Note); 
+                    notesComp.remove(Note);
+
                   },
                   child: Container(
                     margin: EdgeInsets.only(left: 6),
@@ -189,43 +190,50 @@ class _HomePageState extends State<HomePage> {
                 ),
                 margin: EdgeInsets.symmetric(horizontal: 3, vertical: 4),
                 child: ListTile(
-                  title: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
-                      children: [
-                        Row(
-                          children: [
-                            Expanded( // Allow text to take available space
-                              child: Text(
-                                noteTitle,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                  title: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        notesComp[Note] = !isCompleted;
+                      });
+                    },
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
+                        children: [
+                          Row(
+                            children: [
+                              Expanded( // Allow text to take available space
+                                child: Text(
+                                  noteTitle,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    decoration: isCompleted ? TextDecoration.lineThrough : null,
+                                  ),
+                                  overflow: TextOverflow.ellipsis, // Add ellipsis if text overflows
+                                  maxLines: 1, // Limit to 1 line to prevent overflow
                                 ),
-                                overflow: TextOverflow.ellipsis, // Add ellipsis if text overflows
-                                maxLines: 1, // Limit to 1 line to prevent overflow
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Expanded( // Allow text to take available space
-                              child: Text(
-                                Note,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            children: [
+                              Expanded( // Allow text to take available space
+                                child: Text(
+                                  Note,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    decoration: isCompleted ? TextDecoration.lineThrough : null,
+                                  ),
+                                  overflow: TextOverflow.ellipsis, // Add ellipsis if text overflows
+                                  maxLines: 2, // Limit to 2 lines
                                 ),
-                                overflow: TextOverflow.ellipsis, // Add ellipsis if text overflows
-                                maxLines: 2, // Limit to 2 lines
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                     leading: IconButton(
@@ -245,7 +253,87 @@ class _HomePageState extends State<HomePage> {
                       )),
                   trailing: IconButton(
                       onPressed: () {
-                        // Edit functionality goes here
+                        showDialog(context: context, builder: (context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            title: Center(
+                                child: const Text(
+                                  'Edit Task',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Color.fromARGB(235, 47, 0, 255)),
+                                )),
+                            content: SizedBox(
+                              height: 200,
+                              width: 300,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 30),
+                                  TextField(
+                                    controller: _titleController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Title',
+                                      labelStyle: TextStyle(
+                                          fontWeight: FontWeight.w400, color: Colors.indigo),
+                                    ),
+                                  ),
+                                  SizedBox(height: 30),
+                                  TextField(
+                                    controller: _noteController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Note',
+                                      labelStyle: TextStyle(
+                                          fontWeight: FontWeight.w400, color: Colors.indigo),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      final String title =_titleController.text.trim() ;
+                                      final String note = notes[_titleController.text.trim()]!;
+                                      setState(() {
+                                        notes[title]=note;
+                                        // notesComp[note] = false; // Default new notes as not completed
+                                      });
+                                      // _titleController.clear();
+                                      // _noteController.clear();
+                                      Navigator.pop(context );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color.fromARGB(255, 63, 55, 204),
+                                            Color.fromARGB(255, 36, 92, 170)
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          );
+                        },);
                       },
                       icon: ImageIcon(
                         AssetImage('assets/icons/edit.png'),
