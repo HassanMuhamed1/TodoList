@@ -112,6 +112,25 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+  void showNoteContent(String noteTitle, String noteContent) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(noteTitle),
+          content: Text(noteContent),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +200,7 @@ class _HomePageState extends State<HomePage> {
             ),
             child: GestureDetector(
               onLongPress: (){
-                showAboutDialog(context: context);
+                showNoteContent(noteTitle , Note);
               },
               child: Container(
                 padding: EdgeInsets.all(1),

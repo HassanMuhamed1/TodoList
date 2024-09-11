@@ -155,7 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     onChanged: (newText) {
                       validatePassword();
                     },
-                    obscuringCharacter: '*',
+                    obscuringCharacter: '•',
                     obscureText: isObsecure,
                     controller: _passwordController,
                     decoration: InputDecoration(
@@ -237,6 +237,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         else{
                           users[_emailController.text] = _passwordController.text;
+                          usersName[_emailController.text] = _nameController.text;
                           String userName = _nameController.text;
                           String email = _emailController.text;
                           Navigator.pushReplacement(

@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (newText) {
                       validatePassword();
                     },
-                    obscuringCharacter: '*',
+                    obscuringCharacter: '•',
                     obscureText: isObsecure,
                     controller: passwordController,
                     decoration: InputDecoration(
