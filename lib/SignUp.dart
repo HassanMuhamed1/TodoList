@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_todo/db.dart';
 import 'Extension.dart';
+import 'Home.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -154,7 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     onChanged: (newText) {
                       validatePassword();
                     },
-                    obscuringCharacter: '·',
+                    obscuringCharacter: '*',
                     obscureText: isObsecure,
                     controller: _passwordController,
                     decoration: InputDecoration(
@@ -236,7 +237,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         else{
                           users[_emailController.text] = _passwordController.text;
-                          Navigator.pushReplacementNamed(context, '/home');
+                          String userName = _nameController.text;
+                          String email = _emailController.text;
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                userName: userName,
+                                email: email,
+                              ),
+                            ),
+                          );
                         }
                       }
                     },

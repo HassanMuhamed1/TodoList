@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (newText) {
                       validatePassword();
                     },
-                    obscuringCharacter: '·',
+                    obscuringCharacter: '*',
                     obscureText: isObsecure,
                     controller: passwordController,
                     decoration: InputDecoration(
@@ -173,6 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       String email = emailController.text;
                       String password = passwordController.text;
+                      String ? _userName = usersName[emailController.text];
                       if (isValidEmail && isValidPassword) {
                         if (users.containsKey(email)) {
                           if (users[email] == password) {
@@ -182,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                               MaterialPageRoute(
                                 builder: (context) => HomePage(
                                   email: email,
-                                  password: password,
+                                  userName: _userName!,
                                 ),
                               ),
                             );

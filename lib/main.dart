@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignUpPage(),
-        '/home': (context) => const HomePage(email: '',password: '',),
+        '/home': (context) => const HomePage(email: '',userName: '',),
       },
     );
   }
